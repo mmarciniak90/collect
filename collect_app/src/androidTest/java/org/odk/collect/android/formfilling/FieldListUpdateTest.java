@@ -40,6 +40,7 @@ import java.util.UUID;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.GrantPermissionRule;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -59,11 +60,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.endsWith;
+import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.test.CustomMatchers.withIndex;
 
@@ -75,7 +77,10 @@ public class FieldListUpdateTest {
     public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
 
     @Rule
-    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA);
 
     @BeforeClass
     public static void copyFormToSdCard() throws IOException {
@@ -318,7 +323,7 @@ public class FieldListUpdateTest {
 
         onView(withId(R.id.capture_image)).perform(click());
 
-        onView(withText("Target10-15")).check(matches(isDisplayed()));
+        onView(withText("Target10-15")).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
         onView(withId(R.id.capture_image)).check(matches(isCompletelyDisplayed()));
     }
 
