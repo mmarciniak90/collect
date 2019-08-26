@@ -71,7 +71,7 @@ public final class FormEntry {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
     }
 
-    public static void checkIsToastWithMessageDisplayes(String message, ActivityTestRule main) {
+    public static void checkIsToastWithMessageDisplays(String message, ActivityTestRule main) {
         onView(withText(message)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
@@ -79,7 +79,7 @@ public final class FormEntry {
         onView(withId(R.id.menu_goto)).perform(click());
     }
 
-    public static void checkIsToastWithStringDisplayes(int value, ActivityTestRule main) {
+    public static void checkIsToastWithStringDisplays(int value, ActivityTestRule main) {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
@@ -103,7 +103,7 @@ public final class FormEntry {
         onView(withId(R.id.questionholder)).perform(swipeLeft());
     }
 
-    public static void swipeToPrevoiusQuestion() {
+    public static void swipeToPreviousQuestion() {
         onView(withId(R.id.questionholder)).perform(swipeRight());
     }
 

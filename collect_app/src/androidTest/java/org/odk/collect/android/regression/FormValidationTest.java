@@ -39,7 +39,7 @@ public class FormValidationTest extends BaseRegressionTest {
         FormEntry.clickGoToIconInForm();
         FormEntry.clickJumpEndButton();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Response length must be between 5 and 15", main);
+        FormEntry.checkIsToastWithMessageDisplays("Response length must be between 5 and 15", main);
         FormEntry.checkIsTextDisplayed("Integer");
         FormEntry.putTextOnIndex(0, "Aaaaa");
         FormEntry.clickGoToIconInForm();

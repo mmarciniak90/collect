@@ -61,7 +61,10 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("emptyGroupFieldList2.xml"))
             .around(new CopyFormRule("metadata2.xml"))
             .around(new CopyFormRule("manyQ.xml"))
-            .around(new CopyFormRule("nigeria-wards.xml"));
+            .around(new CopyFormRule("nigeria-wards.xml"))
+            .around(new CopyFormRule("dont-show-options-selected-in-other-instances.xml"))
+            .around(new CopyFormRule("t21257.xml"))
+            .around(new CopyFormRule("test_multiselect_cleared.xml"));
 
     @Test
     public void subtext_ShouldDisplayAdditionalInformation() {
@@ -147,7 +150,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.putText("Abi");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("Abies");
-        FormEntry.swipeToPrevoiusQuestion();
+        FormEntry.swipeToPreviousQuestion();
         FormEntry.putText("Abr");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("Abrotanum alpestre");
@@ -212,11 +215,11 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Mountain pine beetle");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington");
-        FormEntry.swipeToPrevoiusQuestion();
+        FormEntry.swipeToPreviousQuestion();
         FormEntry.clickOnText("Invasive alien species");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation");
-        FormEntry.swipeToPrevoiusQuestion();
+        FormEntry.swipeToPreviousQuestion();
         FormEntry.clickOnText("Longhorn beetles");
         FormEntry.swipeToNextQuestion();
         FormEntry.checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson");
@@ -226,7 +229,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
     }
 
     @Test
@@ -293,7 +296,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Oranges");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
     }
 
     @Test
@@ -345,7 +348,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOk();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
 
         MainMenu.startBlankForm("g6Error2");
         FormEntry.putText("bla");
@@ -356,17 +359,17 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.putText("ble");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
 
         MainMenu.startBlankForm("emptyGroupFieldList");
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
 
         MainMenu.startBlankForm("emptyGroupFieldList2");
         FormEntry.putText("nana");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
     }
 
     @Test
@@ -375,7 +378,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase27
         MainMenu.startBlankForm("metadata2");
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplayes("Form successfully saved!", main);
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
     }
 
     private String getQuestionText() {
@@ -415,4 +418,88 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
     }
+
+    @Test
+    public void noErrorDialog_ShouldBeFilledSuccessfully() {
+
+        //TestCase42
+        MainMenu.startBlankForm("dont-show-options-selected-in-other-instances");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("School A");
+        FormEntry.clickOnText("School B");
+        FormEntry.clickOnText("School C");
+        FormEntry.checkIsTextDisplayed("previous: c");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+        MainMenu.startBlankForm("dont-show-options-selected-in-other-instances");
+        FormEntry.checkIsTextDisplayed("previous: c");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIfTextDoesNotExist("School C");
+        FormEntry.clickOnText("School D");
+        FormEntry.clickOnText("School E");
+        FormEntry.clickOnText("School F");
+        FormEntry.checkIsTextDisplayed("previous: c f");
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+
+
+    }
+
+    @Test
+    public void questionValidation_ShouldShowToastWhenConditionsAreNotSet() {
+
+        //TestCase43
+        MainMenu.startBlankForm("t21257");
+        FormEntry.clickOnText("mytext1");
+        FormEntry.putText("test");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.putText("17");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.putText("118");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.putText("50");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.putText("17");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.putText("118");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.putText("50");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.putText("test2");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+
+    }
+
+    @Test
+    public void noDataLost_ShouldRememberAnswersForMultiSelectWidget() {
+
+        //TestCase44
+        MainMenu.startBlankForm("test_multiselect_cleared");
+        FormEntry.clickOnText("a");
+        FormEntry.clickOnText("c");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("b");
+        FormEntry.clickOnText("d");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToPreviousQuestion();
+        FormEntry.swipeToPreviousQuestion();
+        FormEntry.swipeToPreviousQuestion();
+        FormEntry.clickGoToIconInForm();
+        FormEntry.checkIsTextDisplayed("a, c");
+        FormEntry.checkIsTextDisplayed("b, d");
+        FormEntry.clickJumpEndButton();
+        FormEntry.clickGoToIconInForm();
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+
+
+    }
+
 }
