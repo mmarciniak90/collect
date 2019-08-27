@@ -4,6 +4,7 @@ import android.Manifest;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -62,7 +63,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
             .around(new CopyFormRule("metadata2.xml"))
             .around(new CopyFormRule("manyQ.xml"))
             .around(new CopyFormRule("nigeria-wards.xml"))
-            .around(new CopyFormRule("dont-show-options-selected-in-other-instances.xml"))
             .around(new CopyFormRule("t21257.xml"))
             .around(new CopyFormRule("test_multiselect_cleared.xml"));
 
@@ -123,7 +123,13 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase17
         MainMenu.startBlankForm("1560_DateData");
-        FormEntry.checkIsTextDisplayed("Jan 01, 1900");
+        try {
+            FormEntry.checkIsTextDisplayed("Jan 01, 1900");
+
+        } catch (NoMatchingViewException e) {
+            FormEntry.checkIsTextDisplayed("01 ene. 1900");
+        }
+        FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
 
@@ -141,95 +147,95 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
+    public void bigForm_ShouldBeFilledSuccessfully() {
 
-        //TestCase41
-        MainMenu.startBlankForm("formulaire_adherent");
-        FormEntry.clickOnString(R.string.add_another);
-        FormEntry.clickOnText("Plante");
-        FormEntry.putText("Abi");
+        //TestCase18
+        MainMenu.startBlankForm("Nigeria Wards");
+        FormEntry.clickOnString(R.string.select_one);
+        FormEntry.clickOnText("Adamawa");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("Abies");
-        FormEntry.swipeToPreviousQuestion();
-        FormEntry.putText("Abr");
+        FormEntry.clickOnString(R.string.select_one);
+        FormEntry.clickOnText("Ganye");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("Abrotanum alpestre");
-    }
-
-    @Test
-    public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
-
-        //TestCase37
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
-        Settings.clickOnUserInterface();
-        Settings.clickOnLanguage();
-        Settings.clickOnSelectedLanguage("Deutsch");
-        MainMenu.clickFillBlankForm();
-        MainMenu.clickOnSortByButton();
-        FormEntry.checkIsTextDisplayed("Sortieren nach");
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(0, R.id.title))
-                .check(matches(withText("Name, A-Z")));
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(0, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(1, R.id.title))
-                .check(matches(withText("Name, Z-A")));
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(1, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(2, R.id.title))
-                .check(matches(withText("Datum, neuestes zuerst")));
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(2, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
-
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(3, R.id.title))
-                .check(matches(withText("Datum, ältestes zuerst")));
-        onView(withRecyclerView(R.id.recyclerView)
-                .atPositionOnView(3, R.id.icon))
-                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
-        pressBack();
-        pressBack();
-        MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
-        Settings.clickOnUserInterface();
-        Settings.clickOnLanguage();
-        Settings.clickOnSelectedLanguage("English");
-    }
-
-    @Test
-    public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
-
-        //TestCase26
-        MainMenu.startBlankForm("CSV error Form");
-        FormEntry.clickOnText("Greg Pommen");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("Mountain pine beetle");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington");
-        FormEntry.swipeToPreviousQuestion();
-        FormEntry.clickOnText("Invasive alien species");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation");
-        FormEntry.swipeToPreviousQuestion();
-        FormEntry.clickOnText("Longhorn beetles");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson");
-        FormEntry.clickOnText("2018-COE-LGH-L-004 @ Acheson");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("No");
+        FormEntry.clickOnString(R.string.select_one);
+        FormEntry.clickOnText("Jaggu");
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+
+    }
+
+    @Test
+    public void values_ShouldBeRandom() {
+
+        //TestCase22
+        List<String> firstQuestionAnswers = new ArrayList<>();
+        List<String> secondQuestionAnswers = new ArrayList<>();
+
+        for (int i = 1; i <= 3; i++) {
+            MainMenu.startBlankForm("random");
+            firstQuestionAnswers.add(getQuestionText());
+            FormEntry.swipeToNextQuestion();
+            secondQuestionAnswers.add(getQuestionText());
+            FormEntry.swipeToNextQuestion();
+            FormEntry.clickSaveAndExit();
+        }
+
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
+        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
+
+        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(1));
+        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(2));
+        assertNotSame(secondQuestionAnswers.get(1), secondQuestionAnswers.get(2));
+
+        firstQuestionAnswers.clear();
+
+        for (int i = 1; i <= 3; i++) {
+            MainMenu.startBlankForm("random test");
+            FormEntry.putText("3");
+            FormEntry.swipeToNextQuestion();
+            firstQuestionAnswers.add(getQuestionText());
+            FormEntry.swipeToNextQuestion();
+            FormEntry.clickSaveAndExit();
+        }
+
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
+        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
+        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
+
+    }
+
+    @Test
+    public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
+
+        //TestCase23
+        MainMenu.startBlankForm("manyQ");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickGoToIconInForm();
+        FormEntry.checkIsTextDisplayed("n1");
+        FormEntry.checkIfTextDoesNotExist("t1");
+        FormEntry.checkIfTextDoesNotExist("t2");
+
+    }
+
+    @Test
+    public void predicateWarning_ShouldBeAbleToFillTheForm() {
+
+        //TestCase24
+        MainMenu.startBlankForm("predicate-warning");
+        FormEntry.clickOnText("Apple");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("Gala");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("Gala");
+        FormEntry.clickOnText("Granny Smith");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+
     }
 
     @Test
@@ -297,46 +303,52 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+
     }
 
     @Test
-    public void values_ShouldBeRandom() {
+    public void searchExpression_ShouldDisplayWhenItContainsOtherAppearanceName() {
 
-        //TestCase22
-        List<String> firstQuestionAnswers = new ArrayList<>();
-        List<String> secondQuestionAnswers = new ArrayList<>();
+        //TestCase26
+        MainMenu.startBlankForm("CSV error Form");
+        FormEntry.clickOnText("Greg Pommen");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("Mountain pine beetle");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsTextDisplayed("2018-COE-MPB-001 @ Wellington");
+        FormEntry.swipeToPreviousQuestion();
+        FormEntry.clickOnText("Invasive alien species");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsTextDisplayed("2018-COE-IAS-e-001 @ Coronation");
+        FormEntry.swipeToPreviousQuestion();
+        FormEntry.clickOnText("Longhorn beetles");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsTextDisplayed("2018-COE-LGH-M-001 @ Acheson");
+        FormEntry.clickOnText("2018-COE-LGH-L-004 @ Acheson");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickOnText("No");
+        FormEntry.swipeToNextQuestion();
+        FormEntry.swipeToNextQuestion();
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
 
-        for (int i = 1; i <= 3; i++) {
-            MainMenu.startBlankForm("random");
-            firstQuestionAnswers.add(getQuestionText());
-            FormEntry.swipeToNextQuestion();
-            secondQuestionAnswers.add(getQuestionText());
-            FormEntry.swipeToNextQuestion();
-            FormEntry.clickSaveAndExit();
-        }
+    }
 
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
-        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
+    @Test
+    public void user_ShouldBeAbleToFillTheForm() {
 
-        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(1));
-        assertNotSame(secondQuestionAnswers.get(0), secondQuestionAnswers.get(2));
-        assertNotSame(secondQuestionAnswers.get(1), secondQuestionAnswers.get(2));
+        //TestCase27
+        MainMenu.startBlankForm("metadata2");
+        FormEntry.clickSaveAndExit();
+        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+    }
 
-        firstQuestionAnswers.clear();
+    private String getQuestionText() {
+        FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
+        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
+        TextView questionView = (TextView) questionContainer.getChildAt(0);
+        return questionView.getText().toString();
 
-        for (int i = 1; i <= 3; i++) {
-            MainMenu.startBlankForm("random test");
-            FormEntry.putText("3");
-            FormEntry.swipeToNextQuestion();
-            firstQuestionAnswers.add(getQuestionText());
-            FormEntry.swipeToNextQuestion();
-            FormEntry.clickSaveAndExit();
-        }
-
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
-        assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(2));
-        assertNotSame(firstQuestionAnswers.get(1), firstQuestionAnswers.get(2));
     }
 
     @Test
@@ -370,78 +382,73 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
         FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+
     }
 
     @Test
-    public void user_ShouldBeAbleToFillTheForm() {
+    public void sortByDialog_ShouldBeTranslatedAndDisplayProperIcons() {
 
-        //TestCase27
-        MainMenu.startBlankForm("metadata2");
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
-    }
+        //TestCase37
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings();
+        Settings.clickOnUserInterface();
+        Settings.clickOnLanguage();
+        Settings.clickOnSelectedLanguage("Deutsch");
+        MainMenu.clickFillBlankForm();
+        MainMenu.clickOnSortByButton();
+        FormEntry.checkIsTextDisplayed("Sortieren nach");
 
-    private String getQuestionText() {
-        FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
-        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.select_container);
-        TextView questionView = (TextView) questionContainer.getChildAt(0);
-        return questionView.getText().toString();
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(0, R.id.title))
+                .check(matches(withText("Name, A-Z")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(0, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(1, R.id.title))
+                .check(matches(withText("Name, Z-A")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(1, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_sort_by_alpha)));
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(2, R.id.title))
+                .check(matches(withText("Datum, neuestes zuerst")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(2, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
+
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(3, R.id.title))
+                .check(matches(withText("Datum, ältestes zuerst")));
+        onView(withRecyclerView(R.id.recyclerView)
+                .atPositionOnView(3, R.id.icon))
+                .check(matches(withImageDrawable(R.drawable.ic_access_time)));
+        pressBack();
+        pressBack();
+        MainMenu.clickOnMenu();
+        MainMenu.clickGeneralSettings();
+        Settings.clickOnUserInterface();
+        Settings.clickOnLanguage();
+        Settings.clickOnSelectedLanguage("English");
+
     }
 
     @Test
-    public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
+    public void answers_ShouldBeSuggestedInComplianceWithSelectedLetters() {
 
-        //TestCase23
-        MainMenu.startBlankForm("manyQ");
+        //TestCase41
+        MainMenu.startBlankForm("formulaire_adherent");
+        FormEntry.clickOnString(R.string.add_another);
+        FormEntry.clickOnText("Plante");
+        FormEntry.putText("Abi");
         FormEntry.swipeToNextQuestion();
+        FormEntry.checkIsTextDisplayed("Abies");
+        FormEntry.swipeToPreviousQuestion();
+        FormEntry.putText("Abr");
         FormEntry.swipeToNextQuestion();
-        FormEntry.clickGoToIconInForm();
-        FormEntry.checkIsTextDisplayed("n1");
-        FormEntry.checkIfTextDoesNotExist("t1");
-        FormEntry.checkIfTextDoesNotExist("t2");
-    }
-
-    @Test
-    public void bigForm_ShouldBeFilledSuccessfully() {
-
-        //TestCase18
-        MainMenu.startBlankForm("Nigeria Wards");
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnText("Adamawa");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnText("Ganye");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnString(R.string.select_one);
-        FormEntry.clickOnText("Jaggu");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-    }
-
-    @Test
-    public void noErrorDialog_ShouldBeFilledSuccessfully() {
-
-        //TestCase42
-        MainMenu.startBlankForm("dont-show-options-selected-in-other-instances");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickOnText("School A");
-        FormEntry.clickOnText("School B");
-        FormEntry.clickOnText("School C");
-        FormEntry.checkIsTextDisplayed("previous: c");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.clickSaveAndExit();
-        MainMenu.startBlankForm("dont-show-options-selected-in-other-instances");
-        FormEntry.checkIsTextDisplayed("previous: c");
-        FormEntry.swipeToNextQuestion();
-        FormEntry.checkIfTextDoesNotExist("School C");
-        FormEntry.clickOnText("School D");
-        FormEntry.clickOnText("School E");
-        FormEntry.clickOnText("School F");
-        FormEntry.checkIsTextDisplayed("previous: c f");
-        FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
-
+        FormEntry.checkIsTextDisplayed("Abrotanum alpestre");
 
     }
 
@@ -473,7 +480,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
 
     }
 
@@ -497,8 +503,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.checkIsTextDisplayed("b, d");
         FormEntry.clickJumpEndButton();
         FormEntry.clickGoToIconInForm();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
-
 
     }
 
