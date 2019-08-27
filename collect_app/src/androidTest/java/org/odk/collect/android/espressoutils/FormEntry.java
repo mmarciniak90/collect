@@ -71,7 +71,7 @@ public final class FormEntry {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
     }
 
-    public static void checkIsToastWithMessageDisplays(String message, ActivityTestRule main) {
+    public static void checkIsToastWithMessageDisplayed(String message, ActivityTestRule main) {
         onView(withText(message)).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
@@ -79,7 +79,7 @@ public final class FormEntry {
         onView(withId(R.id.menu_goto)).perform(click());
     }
 
-    public static void checkIsToastWithStringDisplays(int value, ActivityTestRule main) {
+    public static void checkIsToastWithStringDisplayed(int value, ActivityTestRule main) {
         onView(withText(getInstrumentation().getTargetContext().getString(value))).inRoot(withDecorView(not(is(main.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 

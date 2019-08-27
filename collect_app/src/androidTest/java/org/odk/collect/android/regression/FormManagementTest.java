@@ -40,7 +40,7 @@ public class FormManagementTest extends  BaseRegressionTest {
         MainMenu.startBlankForm("OnePageFormValid");
         FormEntry.putText("Bla");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplays("Response length must be between 5 and 15", main);
+        FormEntry.checkIsToastWithMessageDisplayed("Response length must be between 5 and 15", main);
         MainMenu.clickOnMenu();
         MainMenu.clickGeneralSettings();
         Settings.openFormManagement();
@@ -50,7 +50,7 @@ public class FormManagementTest extends  BaseRegressionTest {
         pressBack();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithMessageDisplays("Response length must be between 5 and 15", main);
+        FormEntry.checkIsToastWithMessageDisplayed("Response length must be between 5 and 15", main);
     }
 
     @Test

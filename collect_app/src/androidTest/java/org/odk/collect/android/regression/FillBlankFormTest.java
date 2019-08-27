@@ -302,7 +302,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOnText("Oranges");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
 
     }
 
@@ -330,7 +330,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
 
     }
 
@@ -340,7 +340,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         //TestCase27
         MainMenu.startBlankForm("metadata2");
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
     }
 
     private String getQuestionText() {
@@ -360,7 +360,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.clickOk();
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
 
         MainMenu.startBlankForm("g6Error2");
         FormEntry.putText("bla");
@@ -371,17 +371,17 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.putText("ble");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
 
         MainMenu.startBlankForm("emptyGroupFieldList");
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
 
         MainMenu.startBlankForm("emptyGroupFieldList2");
         FormEntry.putText("nana");
         FormEntry.swipeToNextQuestion();
         FormEntry.clickSaveAndExit();
-        FormEntry.checkIsToastWithStringDisplays(R.string.data_saved_ok, main);
+        FormEntry.checkIsToastWithStringDisplayed(R.string.data_saved_ok, main);
 
     }
 
@@ -453,7 +453,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
     }
 
     @Test
-    public void questionValidation_ShouldShowToastWhenConditionsAreNotSet() {
+    public void questionValidation_ShouldShowToastOnlyWhenConditionsAreNotMet() {
 
         //TestCase43
         MainMenu.startBlankForm("t21257");
@@ -462,18 +462,18 @@ public class FillBlankFormTest extends BaseRegressionTest {
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("17");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.checkIsToastWithMessageDisplayed("mydecimal constraint", main);
         FormEntry.putText("118");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.checkIsToastWithMessageDisplayed("mydecimal constraint", main);
         FormEntry.putText("50");
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("17");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.checkIsToastWithMessageDisplayed("mydecimal constraint", main);
         FormEntry.putText("118");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplays("mydecimal constraint", main);
+        FormEntry.checkIsToastWithMessageDisplayed("mydecimal constraint", main);
         FormEntry.putText("50");
         FormEntry.swipeToNextQuestion();
         FormEntry.putText("test2");

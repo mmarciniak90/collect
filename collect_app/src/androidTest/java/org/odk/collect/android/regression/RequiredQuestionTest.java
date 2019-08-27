@@ -49,7 +49,7 @@ public class RequiredQuestionTest extends BaseRegressionTest {
         //TestCase2
         MainMenu.startBlankForm("required");
         FormEntry.swipeToNextQuestion();
-        FormEntry.checkIsToastWithMessageDisplays("Custom required message", main);
+        FormEntry.checkIsToastWithMessageDisplayed("Custom required message", main);
         closeSoftKeyboard();
         pressBack();
         FormEntry.clickIgnoreChanges();
