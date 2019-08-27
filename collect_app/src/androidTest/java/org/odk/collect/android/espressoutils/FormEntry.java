@@ -140,4 +140,19 @@ public final class FormEntry {
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
     }
 
+    public static void clickForwardButton() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.form_forward))).perform(click());
+    }
+
+    public static void clickBackwardButton() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.form_backward))).perform(click());
+    }
+
+    public static void addRepeatGroup() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.add_another))).perform(click());
+    }
+
+    public static void doNotAddRepeatGroup() {
+        onView(withText(getInstrumentation().getTargetContext().getString(R.string.add_repeat_no))).perform(click());
+    }
 }
