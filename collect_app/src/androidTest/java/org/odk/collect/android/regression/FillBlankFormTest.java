@@ -172,7 +172,6 @@ public class FillBlankFormTest extends BaseRegressionTest {
         List<String> firstQuestionAnswers = new ArrayList<>();
         List<String> secondQuestionAnswers = new ArrayList<>();
 
-
         for (int i = 1; i <= 3; i++) {
             MainMenu.startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
