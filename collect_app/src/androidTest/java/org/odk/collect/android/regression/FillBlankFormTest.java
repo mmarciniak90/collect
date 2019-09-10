@@ -172,6 +172,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         List<String> firstQuestionAnswers = new ArrayList<>();
         List<String> secondQuestionAnswers = new ArrayList<>();
 
+
         for (int i = 1; i <= 3; i++) {
             MainMenu.startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
@@ -390,7 +391,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
 
         //TestCase37
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("Deutsch");
@@ -428,7 +429,7 @@ public class FillBlankFormTest extends BaseRegressionTest {
         pressBack();
         pressBack();
         MainMenu.clickOnMenu();
-        MainMenu.clickGeneralSettings();
+        MainMenu.clickGeneralSettings(main.getActivity());
         Settings.clickOnUserInterface();
         Settings.clickOnLanguage();
         Settings.clickOnSelectedLanguage("English");
